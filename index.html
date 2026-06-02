@@ -1,0 +1,2117 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مولد السير الذاتية - شركة الإنجاز المعتمد للاستقدام</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&family=Roboto:wght@300;400;500;700;900&family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    
+    <!-- html2pdf -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-navy: #0a2540;
+            --secondary-navy: #1a3a5c;
+            --accent-gold: #b8924a;
+            --light-gold: #d4af6a;
+            --bg-cream: #faf8f3;
+            --border-color: #2c3e50;
+            --soft-border: #cbd5e1;
+            --text-dark: #1a1a1a;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Tajawal', 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        /* ============= MAIN LAYOUT ============= */
+        .app-wrapper {
+            display: grid;
+            grid-template-columns: 420px 1fr;
+            min-height: 100vh;
+            gap: 0;
+        }
+
+        @media (max-width: 1100px) {
+            .app-wrapper {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ============= SIDEBAR FORM ============= */
+        .sidebar-form {
+            background: #ffffff;
+            box-shadow: 2px 0 20px rgba(0,0,0,0.15);
+            overflow-y: auto;
+            max-height: 100vh;
+            position: sticky;
+            top: 0;
+        }
+
+        @media (max-width: 1100px) {
+            .sidebar-form {
+                position: relative;
+                max-height: none;
+            }
+        }
+
+        .sidebar-header {
+            background: linear-gradient(135deg, var(--primary-navy) 0%, var(--secondary-navy) 100%);
+            color: white;
+            padding: 20px 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sidebar-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(184,146,74,0.3) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .sidebar-header h1 {
+            font-size: 18px;
+            font-weight: 800;
+            margin: 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .sidebar-header p {
+            font-size: 12px;
+            opacity: 0.85;
+            margin: 4px 0 0 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .form-body {
+            padding: 16px 20px;
+        }
+
+        .form-section {
+            margin-bottom: 18px;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #fafbfc;
+        }
+
+        .section-title {
+            background: linear-gradient(135deg, var(--primary-navy) 0%, var(--secondary-navy) 100%);
+            color: white;
+            padding: 10px 14px;
+            font-size: 13px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .section-title i {
+            color: var(--light-gold);
+            font-size: 13px;
+        }
+
+        .section-title .toggle-icon {
+            margin-right: auto;
+            transition: transform 0.3s;
+            color: rgba(255,255,255,0.7);
+        }
+
+        .section-content {
+            padding: 12px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .section-content.collapsed {
+            display: none;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            font-size: 11px;
+            font-weight: 600;
+            color: #475569;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .form-group label i {
+            color: var(--accent-gold);
+            font-size: 10px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 7px 10px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 12px;
+            font-family: inherit;
+            background: white;
+            transition: all 0.2s;
+            outline: none;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 0 3px rgba(184,146,74,0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        /* Checkbox group */
+        .checkbox-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+            grid-column: 1 / -1;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 10px;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+
+        .checkbox-item:hover {
+            border-color: var(--accent-gold);
+        }
+
+        .checkbox-item input {
+            width: 14px;
+            height: 14px;
+            accent-color: var(--primary-navy);
+        }
+
+        .checkbox-item.checked {
+            background: #fef9ed;
+            border-color: var(--accent-gold);
+        }
+
+        /* Language Rating */
+        .lang-rating {
+            grid-column: 1 / -1;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 8px 10px;
+        }
+
+        .lang-rating-row {
+            display: grid;
+            grid-template-columns: 80px 1fr;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 0;
+        }
+
+        .lang-rating-row + .lang-rating-row {
+            border-top: 1px dashed #e2e8f0;
+            margin-top: 4px;
+            padding-top: 8px;
+        }
+
+        .lang-label {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--primary-navy);
+        }
+
+        .lang-options {
+            display: flex;
+            gap: 4px;
+        }
+
+        .lang-options label {
+            flex: 1;
+            text-align: center;
+            padding: 4px 6px;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+            transition: all 0.2s;
+            background: #f8fafc;
+        }
+
+        .lang-options label:hover {
+            background: #f1f5f9;
+        }
+
+        .lang-options input[type="radio"] {
+            display: none;
+        }
+
+        .lang-options input[type="radio"]:checked + label,
+        .lang-options label.selected {
+            background: var(--primary-navy);
+            color: white;
+            border-color: var(--primary-navy);
+        }
+
+        /* File Upload */
+        .file-upload {
+            grid-column: 1 / -1;
+        }
+
+        .file-upload-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 2px dashed #cbd5e1;
+            border-radius: 8px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: white;
+            text-align: center;
+        }
+
+        .file-upload-label:hover {
+            border-color: var(--accent-gold);
+            background: #fef9ed;
+        }
+
+        .file-upload-label i {
+            font-size: 24px;
+            color: var(--accent-gold);
+            margin-bottom: 6px;
+        }
+
+        .file-upload-label .upload-text {
+            font-size: 12px;
+            font-weight: 600;
+            color: #475569;
+        }
+
+        .file-upload-label .upload-hint {
+            font-size: 10px;
+            color: #94a3b8;
+            margin-top: 2px;
+        }
+
+        .file-upload input {
+            display: none;
+        }
+
+        .file-preview {
+            margin-top: 8px;
+            display: none;
+            position: relative;
+        }
+
+        .file-preview img {
+            width: 100%;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .file-preview .remove-btn {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        /* Export Button */
+        .export-section {
+            padding: 16px 20px 20px;
+            background: linear-gradient(180deg, transparent, #f8fafc);
+            border-top: 1px solid #e2e8f0;
+            position: sticky;
+            bottom: 0;
+            background: white;
+            z-index: 10;
+        }
+
+        .btn-export {
+            width: 100%;
+            background: linear-gradient(135deg, var(--accent-gold) 0%, #9c7a3a 100%);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(184,146,74,0.3);
+            font-family: inherit;
+        }
+
+        .btn-export:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(184,146,74,0.45);
+        }
+
+        .btn-export:disabled {
+            opacity: 0.6;
+            cursor: wait;
+        }
+
+        .btn-reset {
+            width: 100%;
+            background: white;
+            color: #64748b;
+            border: 1px solid #e2e8f0;
+            padding: 8px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .btn-reset:hover {
+            background: #f8fafc;
+            color: var(--primary-navy);
+        }
+
+        /* ============= PREVIEW AREA ============= */
+        .preview-area {
+            padding: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            overflow-y: auto;
+        }
+
+        .preview-wrapper {
+            box-shadow: 0 25px 60px rgba(0,0,0,0.4);
+            transform-origin: top center;
+        }
+
+        /* ============= A4 PAPER ============= */
+        .a4-paper {
+            width: 210mm;
+            min-height: 297mm;
+            background: white;
+            color: var(--text-dark);
+            font-family: 'Tajawal', 'Roboto', sans-serif;
+            position: relative;
+            padding: 0;
+            direction: ltr;
+        }
+
+        /* Header */
+        .cv-header {
+            background: linear-gradient(135deg, var(--primary-navy) 0%, var(--secondary-navy) 100%);
+            color: white;
+            padding: 14px 20px;
+            display: grid;
+            grid-template-columns: 80px 1fr 80px;
+            align-items: center;
+            gap: 16px;
+            border-bottom: 4px solid var(--accent-gold);
+        }
+
+        .cv-logo {
+            width: 75px;
+            height: 75px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid var(--accent-gold);
+            overflow: hidden;
+        }
+
+        .cv-logo-inner {
+            text-align: center;
+            color: var(--primary-navy);
+            font-weight: 900;
+            font-size: 9px;
+            line-height: 1.1;
+            padding: 4px;
+        }
+
+        .cv-logo-inner .logo-icon {
+            font-size: 24px;
+            color: var(--accent-gold);
+            margin-bottom: 2px;
+        }
+
+        .cv-header-text {
+            text-align: center;
+        }
+
+        .cv-header-text .company-ar {
+            font-family: 'Tajawal', sans-serif;
+            font-size: 22px;
+            font-weight: 900;
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        .cv-header-text .company-en {
+            font-family: 'Roboto', sans-serif;
+            font-size: 13px;
+            font-weight: 500;
+            margin: 4px 0 0 0;
+            color: var(--light-gold);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .cv-header-text .divider {
+            width: 60px;
+            height: 2px;
+            background: var(--light-gold);
+            margin: 6px auto;
+        }
+
+        .cv-ref {
+            text-align: center;
+            font-size: 9px;
+        }
+
+        .cv-ref .ref-box {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid var(--light-gold);
+            padding: 6px;
+            border-radius: 4px;
+        }
+
+        .cv-ref .ref-num {
+            font-weight: 700;
+            font-size: 11px;
+            color: var(--light-gold);
+        }
+
+        /* Title Bar */
+        .cv-title-bar {
+            background: var(--accent-gold);
+            color: white;
+            padding: 8px 20px;
+            text-align: center;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            font-weight: 800;
+        }
+
+        .cv-title-bar .title-ar {
+            font-family: 'Tajawal', sans-serif;
+            font-size: 16px;
+        }
+
+        .cv-title-bar .title-en {
+            font-family: 'Roboto', sans-serif;
+            font-size: 13px;
+            letter-spacing: 1px;
+        }
+
+        .cv-title-bar .title-sep {
+            width: 2px;
+            height: 20px;
+            background: white;
+            opacity: 0.5;
+        }
+
+        /* Content */
+        .cv-content {
+            padding: 12px 16px;
+        }
+
+        /* Top Row: Photo + Position Info */
+        .top-row {
+            display: grid;
+            grid-template-columns: 130px 1fr;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+
+        .photo-box {
+            border: 3px double var(--primary-navy);
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            height: 175px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+            box-shadow: inset 0 0 0 2px white, 0 2px 8px rgba(10,37,64,0.15);
+        }
+
+        .photo-box::before {
+            content: '';
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            right: 4px;
+            bottom: 4px;
+            border: 1px solid var(--accent-gold);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .photo-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: relative;
+            z-index: 0;
+        }
+
+        .photo-placeholder {
+            text-align: center;
+            color: #64748b;
+            padding: 12px;
+            z-index: 1;
+        }
+
+        .photo-placeholder i {
+            font-size: 52px;
+            display: block;
+            margin-bottom: 6px;
+            color: var(--primary-navy);
+            opacity: 0.4;
+        }
+
+        .photo-placeholder span {
+            font-size: 10px;
+            display: block;
+            line-height: 1.3;
+            font-weight: 600;
+        }
+
+        .position-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11px;
+        }
+
+        .info-table tr {
+            border: 1px solid var(--border-color);
+        }
+
+        .info-table td {
+            padding: 6px 8px;
+            border: 1px solid var(--border-color);
+            vertical-align: middle;
+        }
+
+        .info-table .label-ar {
+            background: var(--primary-navy);
+            color: white;
+            font-family: 'Tajawal', sans-serif;
+            font-weight: 700;
+            width: 30%;
+            text-align: center;
+            font-size: 11px;
+        }
+
+        .info-table .label-en {
+            background: #e2e8f0;
+            color: var(--primary-navy);
+            font-family: 'Roboto', sans-serif;
+            font-weight: 700;
+            width: 28%;
+            text-align: center;
+            font-size: 10px;
+        }
+
+        .info-table .value {
+            background: white;
+            font-weight: 600;
+            color: var(--text-dark);
+            font-size: 11px;
+        }
+
+        /* Section Header in CV */
+        .cv-section-header {
+            background: linear-gradient(135deg, var(--primary-navy) 0%, var(--secondary-navy) 100%);
+            color: white;
+            padding: 6px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0;
+            border: 1px solid var(--primary-navy);
+        }
+
+        .cv-section-header .header-ar {
+            font-family: 'Tajawal', sans-serif;
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .cv-section-header .header-en {
+            font-family: 'Roboto', sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: var(--light-gold);
+        }
+
+        /* Details Table */
+        .details-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11px;
+            margin-bottom: 10px;
+        }
+
+        .details-table tr {
+            border: 1px solid var(--border-color);
+        }
+
+        .details-table td {
+            padding: 5px 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .details-table .col-label-ar {
+            background: #f1f5f9;
+            font-family: 'Tajawal', sans-serif;
+            font-weight: 700;
+            color: var(--primary-navy);
+            width: 18%;
+            text-align: right;
+            direction: rtl;
+            font-size: 11px;
+        }
+
+        .details-table .col-label-en {
+            background: #f8fafc;
+            font-family: 'Roboto', sans-serif;
+            font-weight: 600;
+            color: var(--secondary-navy);
+            width: 18%;
+            text-align: left;
+            font-size: 10px;
+        }
+
+        .details-table .col-value {
+            background: white;
+            font-weight: 600;
+            color: var(--text-dark);
+            font-size: 11px;
+            width: 32%;
+        }
+
+        /* Skills Section */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+            border: 1px solid var(--border-color);
+            margin-bottom: 10px;
+        }
+
+        .skills-grid > div {
+            border: 1px solid var(--border-color);
+            padding: 8px 10px;
+        }
+
+        .skill-header {
+            background: #f1f5f9;
+            font-weight: 700;
+            color: var(--primary-navy);
+            font-size: 11px;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+            padding-bottom: 4px;
+            border-bottom: 1px solid var(--soft-border);
+        }
+
+        .skill-header .ar {
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        .skill-header .en {
+            font-family: 'Roboto', sans-serif;
+            font-size: 10px;
+        }
+
+        .checkbox-list {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4px;
+        }
+
+        .check-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            padding: 2px 0;
+        }
+
+        .check-box {
+            width: 14px;
+            height: 14px;
+            border: 1.5px solid var(--primary-navy);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            color: var(--primary-navy);
+            font-weight: 900;
+        }
+
+        .check-item.active .check-box {
+            background: var(--primary-navy);
+            color: white;
+        }
+
+        .check-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.1;
+        }
+
+        .check-text .ar {
+            font-family: 'Tajawal', sans-serif;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .check-text .en {
+            font-family: 'Roboto', sans-serif;
+            font-size: 9px;
+            color: #64748b;
+        }
+
+        /* Language Table */
+        .lang-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11px;
+        }
+
+        .lang-table th,
+        .lang-table td {
+            border: 1px solid var(--border-color);
+            padding: 4px 6px;
+            text-align: center;
+        }
+
+        .lang-table th {
+            background: var(--primary-navy);
+            color: white;
+            font-weight: 700;
+            font-size: 10px;
+        }
+
+        .lang-table th .ar {
+            font-family: 'Tajawal', sans-serif;
+            display: block;
+        }
+
+        .lang-table th .en {
+            font-family: 'Roboto', sans-serif;
+            font-size: 9px;
+            color: var(--light-gold);
+            font-weight: 500;
+        }
+
+        .lang-table td {
+            background: white;
+            font-weight: 600;
+        }
+
+        .lang-table td.lang-name {
+            background: #f1f5f9;
+            text-align: right;
+            padding-right: 10px;
+            font-weight: 700;
+            color: var(--primary-navy);
+        }
+
+        .lang-rating-mark {
+            width: 16px;
+            height: 16px;
+            border: 1.5px solid var(--primary-navy);
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+        }
+
+        .lang-rating-mark.active {
+            background: var(--accent-gold);
+            border-color: var(--accent-gold);
+            color: white;
+        }
+
+        .lang-rating-mark.active::after {
+            content: '✓';
+            font-size: 11px;
+            font-weight: 900;
+        }
+
+        /* Work Experience */
+        .work-exp-box {
+            border: 1px solid var(--border-color);
+            padding: 8px 10px;
+            min-height: 50px;
+            background: white;
+            font-size: 11px;
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
+
+        /* Passport Section */
+        .passport-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11px;
+            margin-bottom: 8px;
+        }
+
+        .passport-table tr {
+            border: 1px solid var(--border-color);
+        }
+
+        .passport-table td {
+            padding: 5px 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .passport-table .p-label-ar {
+            background: var(--primary-navy);
+            color: white;
+            font-family: 'Tajawal', sans-serif;
+            font-weight: 700;
+            width: 16%;
+            text-align: center;
+            font-size: 10px;
+        }
+
+        .passport-table .p-label-en {
+            background: #e2e8f0;
+            color: var(--primary-navy);
+            font-family: 'Roboto', sans-serif;
+            font-weight: 700;
+            width: 14%;
+            text-align: center;
+            font-size: 9px;
+        }
+
+        .passport-table .p-value {
+            background: white;
+            font-weight: 600;
+            color: var(--text-dark);
+            width: 20%;
+            text-align: center;
+            font-size: 11px;
+        }
+
+        /* Passport Image */
+        .passport-image-box {
+            border: 2px solid var(--primary-navy);
+            background: #f8fafc;
+            padding: 4px;
+            margin-top: 6px;
+            text-align: center;
+        }
+
+        .passport-image-box .pass-label {
+            background: var(--accent-gold);
+            color: white;
+            padding: 3px 8px;
+            font-size: 10px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .passport-image-box img {
+            max-width: 100%;
+            max-height: 200px;
+            object-fit: contain;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .passport-image-box .pass-placeholder {
+            padding: 30px 12px;
+            color: #94a3b8;
+            text-align: center;
+            font-size: 11px;
+        }
+
+        .passport-image-box .pass-placeholder i {
+            font-size: 36px;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        /* Footer */
+        .cv-footer {
+            background: linear-gradient(135deg, var(--primary-navy) 0%, var(--secondary-navy) 100%);
+            color: white;
+            padding: 8px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 9px;
+            margin-top: 10px;
+            border-top: 3px solid var(--accent-gold);
+        }
+
+        .cv-footer .footer-section {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .cv-footer .footer-section i {
+            color: var(--light-gold);
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-100px);
+            background: var(--primary-navy);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            z-index: 9999;
+            transition: transform 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+        }
+
+        .notification.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .notification.success {
+            background: #10b981;
+        }
+
+        .notification.error {
+            background: #ef4444;
+        }
+
+        /* Loading overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10,37,64,0.9);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 99999;
+            flex-direction: column;
+            color: white;
+        }
+
+        .loading-overlay.show {
+            display: flex;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(255,255,255,0.2);
+            border-top-color: var(--accent-gold);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 16px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Scrollbar */
+        .sidebar-form::-webkit-scrollbar,
+        .preview-area::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .sidebar-form::-webkit-scrollbar-track,
+        .preview-area::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+
+        .sidebar-form::-webkit-scrollbar-thumb,
+        .preview-area::-webkit-scrollbar-thumb {
+            background: var(--primary-navy);
+            border-radius: 4px;
+        }
+
+        /* Responsive Preview Scaling */
+        @media (max-width: 1400px) and (min-width: 1100px) {
+            .preview-wrapper {
+                transform: scale(0.85);
+            }
+        }
+
+        @media (max-width: 1250px) and (min-width: 1100px) {
+            .preview-wrapper {
+                transform: scale(0.75);
+            }
+        }
+
+        @media (max-width: 1100px) {
+            .preview-area {
+                padding: 15px 0;
+            }
+            .preview-wrapper {
+                transform: scale(0.55);
+                transform-origin: top center;
+            }
+            .a4-paper {
+                margin-bottom: -300px;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .preview-wrapper {
+                transform: scale(0.42);
+            }
+            .a4-paper {
+                margin-bottom: -450px;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .preview-wrapper {
+                transform: scale(0.32);
+            }
+            .a4-paper {
+                margin-bottom: -550px;
+            }
+        }
+
+        /* PDF Export Mode - removes shadow and constraints */
+        .a4-paper.exporting {
+            box-shadow: none !important;
+        }
+
+        /* Watermark */
+        .cv-watermark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-30deg);
+            font-size: 80px;
+            font-weight: 900;
+            color: rgba(10,37,64,0.03);
+            pointer-events: none;
+            z-index: 0;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+        <h3 style="margin:0;font-size:18px;">جاري إنشاء ملف PDF...</h3>
+        <p style="margin:8px 0 0;opacity:0.7;font-size:13px;">Please wait while we generate your document</p>
+    </div>
+
+    <!-- Notification -->
+    <div class="notification" id="notification">
+        <i class="fa-solid fa-circle-check"></i>
+        <span id="notificationText">تم الحفظ بنجاح</span>
+    </div>
+
+    <div class="app-wrapper">
+        
+        <!-- ============= SIDEBAR FORM ============= -->
+        <aside class="sidebar-form">
+            <div class="sidebar-header">
+                <h1><i class="fa-solid fa-file-circle-check"></i> مولد السيرة الذاتية</h1>
+                <p>شركة الإنجاز المعتمد للاستقدام</p>
+            </div>
+
+            <div class="form-body">
+
+                <!-- Basic Info -->
+                <div class="form-section">
+                    <div class="section-title" onclick="toggleSection(this)">
+                        <i class="fa-solid fa-briefcase"></i>
+                        <span>البيانات الأساسية | Basic Info</span>
+                        <i class="fa-solid fa-chevron-down toggle-icon"></i>
+                    </div>
+                    <div class="section-content">
+                        <div class="form-group full-width">
+                            <label><i class="fa-solid fa-user-tie"></i> المهنة | Position</label>
+                            <input type="text" id="position" data-target="cvPosition" value="House Maid - عاملة منزلية">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fa-solid fa-sack-dollar"></i> الراتب | Salary</label>
+                            <input type="text" id="salary" data-target="cvSalary" value="1000 SAR">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fa-solid fa-calendar-days"></i> مدة العقد | Contract</label>
+                            <input type="text" id="contract" data-target="cvContract" value="2 Years - سنتان">
+                        </div>
+                        <div class="form-group full-width">
+                            <label><i class="fa-solid fa-hashtag"></i> رقم المرجع | Reference No.</label>
+                            <input type="text" id="refNo" data-target="cvRefNo" value="ENJ-2026-0001">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Personal Details -->
+                <div class="form-section">
+                    <div class="section-title" onclick="toggleSection(this)">
+                        <i class="fa-solid fa-id-card"></i>
+                        <span>البيانات الشخصية | Personal Details</span>
+                        <i class="fa-solid fa-chevron-down toggle-icon"></i>
+                    </div>
+                    <div class="section-content">
+                        <div class="form-group full-width">
+                            <label><i class="fa-solid fa-user"></i> الاسم الكامل | Full Name</label>
+                            <input type="text" id="fullName" data-target="cvFullName" value="MARIA SANTOS DELA CRUZ">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fa-solid fa-flag"></i> الجنسية | Nationality</label>
+                            <input type="text" id="nationality" data-target="cvNationality" value="Filipino - فلبينية">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fa-solid fa-place-of-worship"></i> الديانة | Religion</label>
+                            <input type="text" id="religion" data-target="cvReligion" value="Christian - مسيحية">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fa-solid fa-cake-candles"></i> تاريخ الميلاد | DOB</label>
+                            <input type="date" id="dob" data-target="cvDob" value="1990-05-15">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fa-solid fa-hourglass-half"></i> العمر | Age</label>
+                            <input type="text" id="age" data-target="cvAge" value="34">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fa-solid fa-map-pin"></i> مكان الميلاد | Birth Place</label>
+                            <input type="text" id="birthPlace" data-target="cvBirthPlace" value="Manila">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fa-solid fa-house"></i> مكان السكن | Address</label>
+                            <input type="text" id="address" data-target="cvAddress" value="Quezon City, Philippines">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fa-solid fa-heart"></i> الحالة الاجتماعية | Marital</label>
+                            <select id="maritalStatus" data-target="cvMaritalStatus">
+                                <option value="Single - عزباء">Single - عزباء</option>
+                                <option value="Married - متزوجة" selected>Married - متزوجة</option>
+                                <option value="Divorced - مطلقة">Divorced - مطلقة</option>
+                                <option value="Widowed - أرملة">Widowed - أرملة</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fa-solid fa-children"></i> عدد الأطفال | Children</label>
+                            <input type="text" id="children" data-target="cvChildren" value="2">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fa-solid fa-weight-scale"></i> الوزن | Weight (KG)</label>
+                            <input type="text" id="weight" data-target="cvWeight" value="58 KG">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fa-solid fa-ruler-vertical"></i> الطول | Height</label>
+                            <input type="text" id="height" data-target="cvHeight" value="160 CM">
+                        </div>
+                        <div class="form-group full-width">
+                            <label><i class="fa-solid fa-palette"></i> لون البشرة | Complexion</label>
+                            <input type="text" id="complexion" data-target="cvComplexion" value="Wheatish - قمحي">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Skills & Experience -->
+                <div class="form-section">
+                    <div class="section-title" onclick="toggleSection(this)">
+                        <i class="fa-solid fa-star"></i>
+                        <span>الخبرات والمهارات | Skills</span>
+                        <i class="fa-solid fa-chevron-down toggle-icon"></i>
+                    </div>
+                    <div class="section-content">
+                        <div class="form-group full-width">
+                            <label><i class="fa-solid fa-globe"></i> الخبرة السابقة | Work Experience</label>
+                            <textarea id="workExp" data-target="cvWorkExp" rows="3">5 years experience in Saudi Arabia as housemaid. Skilled in childcare, cooking, and cleaning. - 5 سنوات خبرة في المملكة العربية السعودية كعاملة منزلية.</textarea>
+                        </div>
+
+                        <div class="checkbox-grid">
+                            <label class="checkbox-item">
+                                <input type="checkbox" class="household-check" data-skill="babysitting" checked>
+                                <span>👶 Baby Sitting - عناية بالأطفال</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" class="household-check" data-skill="cleaning" checked>
+                                <span>🧹 Cleaning - تنظيف</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" class="household-check" data-skill="cooking" checked>
+                                <span>🍳 Cooking - طبخ</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" class="household-check" data-skill="washing" checked>
+                                <span>🧺 Washing - غسيل</span>
+                            </label>
+                        </div>
+
+                        <!-- Language Rating -->
+                        <div class="lang-rating">
+                            <div class="lang-rating-row">
+                                <span class="lang-label">العربية<br><small style="font-size:9px;font-weight:400;color:#64748b">Arabic</small></span>
+                                <div class="lang-options">
+                                    <label class="lang-opt" data-lang="arabic" data-level="excellent">ممتاز</label>
+                                    <label class="lang-opt selected" data-lang="arabic" data-level="good">جيد</label>
+                                    <label class="lang-opt" data-lang="arabic" data-level="poor">ضعيف</label>
+                                </div>
+                            </div>
+                            <div class="lang-rating-row">
+                                <span class="lang-label">الإنجليزية<br><small style="font-size:9px;font-weight:400;color:#64748b">English</small></span>
+                                <div class="lang-options">
+                                    <label class="lang-opt selected" data-lang="english" data-level="excellent">ممتاز</label>
+                                    <label class="lang-opt" data-lang="english" data-level="good">جيد</label>
+                                    <label class="lang-opt" data-lang="english" data-level="poor">ضعيف</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Passport Details -->
+                <div class="form-section">
+                    <div class="section-title" onclick="toggleSection(this)">
+                        <i class="fa-solid fa-passport"></i>
+                        <span>بيانات الجواز | Passport</span>
+                        <i class="fa-solid fa-chevron-down toggle-icon"></i>
+                    </div>
+                    <div class="section-content">
+                        <div class="form-group">
+                            <label><i class="fa-solid fa-hashtag"></i> رقم الجواز | Passport No.</label>
+                            <input type="text" id="passportNo" data-target="cvPassportNo" value="P1234567A">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fa-solid fa-location-dot"></i> مكان الإصدار | Place</label>
+                            <input type="text" id="passportPlace" data-target="cvPassportPlace" value="DFA Manila">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fa-solid fa-calendar-plus"></i> تاريخ الإصدار | Issue</label>
+                            <input type="date" id="passportIssue" data-target="cvPassportIssue" value="2022-03-10">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fa-solid fa-calendar-xmark"></i> تاريخ الانتهاء | Expiry</label>
+                            <input type="date" id="passportExpiry" data-target="cvPassportExpiry" value="2032-03-09">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Images -->
+                <div class="form-section">
+                    <div class="section-title" onclick="toggleSection(this)">
+                        <i class="fa-solid fa-image"></i>
+                        <span>الصور | Photos</span>
+                        <i class="fa-solid fa-chevron-down toggle-icon"></i>
+                    </div>
+                    <div class="section-content">
+                        <div class="file-upload">
+                            <label class="file-upload-label" for="personalPhoto">
+                                <i class="fa-solid fa-camera"></i>
+                                <span class="upload-text">الصورة الشخصية</span>
+                                <span class="upload-hint">Personal Photo (Recommended: 400x500px)</span>
+                            </label>
+                            <input type="file" id="personalPhoto" accept="image/*">
+                            <div class="file-preview" id="personalPhotoPreview">
+                                <button class="remove-btn" onclick="removeImage('personal')">×</button>
+                                <img id="personalPhotoImg">
+                            </div>
+                        </div>
+
+                        <div class="file-upload">
+                            <label class="file-upload-label" for="passportPhoto">
+                                <i class="fa-solid fa-passport"></i>
+                                <span class="upload-text">صورة الجواز</span>
+                                <span class="upload-hint">Passport Copy (Wide image)</span>
+                            </label>
+                            <input type="file" id="passportPhoto" accept="image/*">
+                            <div class="file-preview" id="passportPhotoPreview">
+                                <button class="remove-btn" onclick="removeImage('passport')">×</button>
+                                <img id="passportPhotoImg">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="export-section">
+                <button class="btn-export" onclick="exportToPDF()" id="exportBtn">
+                    <i class="fa-solid fa-file-arrow-down"></i>
+                    <span>حفظ وتصدير PDF</span>
+                </button>
+                <button class="btn-reset" onclick="resetForm()">
+                    <i class="fa-solid fa-rotate-left"></i> إعادة تعيين البيانات
+                </button>
+            </div>
+        </aside>
+
+        <!-- ============= PREVIEW AREA ============= -->
+        <main class="preview-area">
+            <div class="preview-wrapper">
+                <div class="a4-paper" id="cvPaper">
+                    
+                    <!-- Watermark -->
+                    <div class="cv-watermark">AL ENJAZ</div>
+
+                    <!-- CV Header -->
+                    <div class="cv-header">
+                        <div class="cv-logo">
+                            <div class="cv-logo-inner">
+                                <i class="fa-solid fa-house-chimney-user logo-icon"></i>
+                                <div>AL ENJAZ</div>
+                                <div style="font-size:7px;">EST. 2010</div>
+                            </div>
+                        </div>
+                        <div class="cv-header-text">
+                            <h1 class="company-ar">شركة الإنجاز المعتمد للاستقدام</h1>
+                            <div class="divider"></div>
+                            <p class="company-en">AL ENJAZ AL MOTAMAD FOR RECRUITMENT</p>
+                        </div>
+                        <div class="cv-ref">
+                            <div class="ref-box">
+                                <div style="font-size:8px;opacity:0.8;">REF. NO</div>
+                                <div class="ref-num" id="cvRefNo">ENJ-2026-0001</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Title Bar -->
+                    <div class="cv-title-bar">
+                        <span class="title-ar">طلب توظيف - عاملة منزلية</span>
+                        <span class="title-sep"></span>
+                        <span class="title-en">HOUSE MAID - APPLICATION FOR EMPLOYMENT</span>
+                    </div>
+
+                    <!-- Content -->
+                    <div class="cv-content">
+
+                        <!-- Top Row: Photo + Position Info -->
+                        <div class="top-row">
+                            <div class="photo-box" id="cvPhotoBox">
+                                <div class="photo-placeholder" id="cvPhotoPlaceholder">
+                                    <i class="fa-solid fa-user"></i>
+                                    <span>الصورة الشخصية<br>Personal Photo</span>
+                                </div>
+                                <img id="cvPhotoImg" style="display:none;">
+                            </div>
+                            <div class="position-info">
+                                <table class="info-table">
+                                    <tr>
+                                        <td class="label-ar">المهنة</td>
+                                        <td class="label-en">Position</td>
+                                        <td class="value" id="cvPosition">House Maid - عاملة منزلية</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="label-ar">الراتب الشهري</td>
+                                        <td class="label-en">Monthly Salary</td>
+                                        <td class="value" id="cvSalary">1000 SAR</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="label-ar">مدة العقد</td>
+                                        <td class="label-en">Contract Period</td>
+                                        <td class="value" id="cvContract">2 Years - سنتان</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="label-ar">تاريخ التقديم</td>
+                                        <td class="label-en">Application Date</td>
+                                        <td class="value" id="cvAppDate">--/--/----</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- DETAILS OF APPLICATION -->
+                        <div class="cv-section-header">
+                            <span class="header-ar">تفاصيل الطلب</span>
+                            <span class="header-en">DETAILS OF APPLICATION</span>
+                        </div>
+                        <table class="details-table">
+                            <tr>
+                                <td class="col-label-ar">الاسم الكامل</td>
+                                <td class="col-label-en">Full Name</td>
+                                <td class="col-value" colspan="4" id="cvFullName">MARIA SANTOS DELA CRUZ</td>
+                            </tr>
+                            <tr>
+                                <td class="col-label-ar">الجنسية</td>
+                                <td class="col-label-en">Nationality</td>
+                                <td class="col-value" id="cvNationality">Filipino - فلبينية</td>
+                                <td class="col-label-ar">الديانة</td>
+                                <td class="col-label-en">Religion</td>
+                                <td class="col-value" id="cvReligion">Christian - مسيحية</td>
+                            </tr>
+                            <tr>
+                                <td class="col-label-ar">تاريخ الميلاد</td>
+                                <td class="col-label-en">Date of Birth</td>
+                                <td class="col-value" id="cvDob">15/05/1990</td>
+                                <td class="col-label-ar">العمر</td>
+                                <td class="col-label-en">Age</td>
+                                <td class="col-value" id="cvAge">34</td>
+                            </tr>
+                            <tr>
+                                <td class="col-label-ar">مكان الميلاد</td>
+                                <td class="col-label-en">Place of Birth</td>
+                                <td class="col-value" id="cvBirthPlace">Manila</td>
+                                <td class="col-label-ar">مكان السكن</td>
+                                <td class="col-label-en">Address</td>
+                                <td class="col-value" id="cvAddress">Quezon City, Philippines</td>
+                            </tr>
+                            <tr>
+                                <td class="col-label-ar">الحالة الاجتماعية</td>
+                                <td class="col-label-en">Marital Status</td>
+                                <td class="col-value" id="cvMaritalStatus">Married - متزوجة</td>
+                                <td class="col-label-ar">عدد الأطفال</td>
+                                <td class="col-label-en">No. of Children</td>
+                                <td class="col-value" id="cvChildren">2</td>
+                            </tr>
+                            <tr>
+                                <td class="col-label-ar">الوزن</td>
+                                <td class="col-label-en">Weight (KG)</td>
+                                <td class="col-value" id="cvWeight">58 KG</td>
+                                <td class="col-label-ar">الطول</td>
+                                <td class="col-label-en">Height (CM)</td>
+                                <td class="col-value" id="cvHeight">160 CM</td>
+                            </tr>
+                            <tr>
+                                <td class="col-label-ar">لون البشرة</td>
+                                <td class="col-label-en">Complexion</td>
+                                <td class="col-value" colspan="4" id="cvComplexion">Wheatish - قمحي</td>
+                            </tr>
+                        </table>
+
+                        <!-- WORK EXPERIENCE -->
+                        <div class="cv-section-header">
+                            <span class="header-ar">الخبرة السابقة خارج البلد</span>
+                            <span class="header-en">WORK EXPERIENCE ABROAD</span>
+                        </div>
+                        <div class="work-exp-box" id="cvWorkExp">
+                            5 years experience in Saudi Arabia as housemaid. Skilled in childcare, cooking, and cleaning.
+                        </div>
+
+                        <!-- SKILLS GRID -->
+                        <div class="skills-grid">
+                            <!-- Household Experience -->
+                            <div>
+                                <div class="skill-header">
+                                    <span class="ar">خبرات المنزل</span>
+                                    <span class="en">HOUSEHOLD EXPERIENCE</span>
+                                </div>
+                                <div class="checkbox-list">
+                                    <div class="check-item active" id="cvCheckBabysitting">
+                                        <span class="check-box">✓</span>
+                                        <span class="check-text">
+                                            <span class="ar">عناية بالأطفال</span>
+                                            <span class="en">Baby Sitting</span>
+                                        </span>
+                                    </div>
+                                    <div class="check-item active" id="cvCheckCleaning">
+                                        <span class="check-box">✓</span>
+                                        <span class="check-text">
+                                            <span class="ar">تنظيف</span>
+                                            <span class="en">Cleaning</span>
+                                        </span>
+                                    </div>
+                                    <div class="check-item active" id="cvCheckCooking">
+                                        <span class="check-box">✓</span>
+                                        <span class="check-text">
+                                            <span class="ar">طبخ</span>
+                                            <span class="en">Cooking</span>
+                                        </span>
+                                    </div>
+                                    <div class="check-item active" id="cvCheckWashing">
+                                        <span class="check-box">✓</span>
+                                        <span class="check-text">
+                                            <span class="ar">غسيل</span>
+                                            <span class="en">Washing</span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Languages -->
+                            <div>
+                                <div class="skill-header">
+                                    <span class="ar">لغة التحدث</span>
+                                    <span class="en">LANGUAGES SPOKEN</span>
+                                </div>
+                                <table class="lang-table">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th><span class="ar">ممتاز</span><span class="en">Excellent</span></th>
+                                            <th><span class="ar">جيد</span><span class="en">Good</span></th>
+                                            <th><span class="ar">ضعيف</span><span class="en">Poor</span></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="lang-name">Arabic<br><small style="font-weight:400;color:#64748b">العربية</small></td>
+                                            <td><span class="lang-rating-mark" id="cvArabicExcellent"></span></td>
+                                            <td><span class="lang-rating-mark active" id="cvArabicGood"></span></td>
+                                            <td><span class="lang-rating-mark" id="cvArabicPoor"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="lang-name">English<br><small style="font-weight:400;color:#64748b">الإنجليزية</small></td>
+                                            <td><span class="lang-rating-mark active" id="cvEnglishExcellent"></span></td>
+                                            <td><span class="lang-rating-mark" id="cvEnglishGood"></span></td>
+                                            <td><span class="lang-rating-mark" id="cvEnglishPoor"></span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- PASSPORT DETAILS -->
+                        <div class="cv-section-header">
+                            <span class="header-ar">بيانات الجواز</span>
+                            <span class="header-en">PASSPORT DETAILS</span>
+                        </div>
+                        <table class="passport-table">
+                            <tr>
+                                <td class="p-label-ar">رقم الجواز</td>
+                                <td class="p-label-en">Passport No.</td>
+                                <td class="p-value" id="cvPassportNo">P1234567A</td>
+                                <td class="p-label-ar">مكان الإصدار</td>
+                                <td class="p-label-en">Place Issued</td>
+                                <td class="p-value" id="cvPassportPlace">DFA Manila</td>
+                            </tr>
+                            <tr>
+                                <td class="p-label-ar">تاريخ الإصدار</td>
+                                <td class="p-label-en">Date of Issue</td>
+                                <td class="p-value" id="cvPassportIssue">10/03/2022</td>
+                                <td class="p-label-ar">تاريخ الانتهاء</td>
+                                <td class="p-label-en">Date of Expiry</td>
+                                <td class="p-value" id="cvPassportExpiry">09/03/2032</td>
+                            </tr>
+                        </table>
+
+                        <!-- Passport Image -->
+                        <div class="passport-image-box">
+                            <div class="pass-label">
+                                <span>صورة الجواز</span>
+                                <span>PASSPORT COPY</span>
+                            </div>
+                            <div id="cvPassportImageContainer">
+                                <div class="pass-placeholder" id="cvPassportPlaceholder">
+                                    <i class="fa-solid fa-passport"></i>
+                                    <div>الرجاء رفع صورة الجواز<br>Please upload passport copy</div>
+                                </div>
+                                <img id="cvPassportImg" style="display:none;">
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="cv-footer">
+                        <div class="footer-section">
+                            <i class="fa-solid fa-phone"></i>
+                            <span>+966 11 234 5678</span>
+                        </div>
+                        <div class="footer-section">
+                            <i class="fa-solid fa-envelope"></i>
+                            <span>info@alenjaz-recruitment.sa</span>
+                        </div>
+                        <div class="footer-section">
+                            <i class="fa-solid fa-location-dot"></i>
+                            <span>الرياض، المملكة العربية السعودية | Riyadh, KSA</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // ============= REAL-TIME DATA BINDING =============
+        document.querySelectorAll('input[data-target], select[data-target], textarea[data-target]').forEach(input => {
+            input.addEventListener('input', function() {
+                const target = document.getElementById(this.dataset.target);
+                if (target) {
+                    let value = this.value;
+                    
+                    // Format dates
+                    if (this.type === 'date' && value) {
+                        const date = new Date(value);
+                        value = date.toLocaleDateString('en-GB', { 
+                            day: '2-digit', 
+                            month: '2-digit', 
+                            year: 'numeric' 
+                        });
+                        
+                        // Auto-calculate age from DOB
+                        if (this.id === 'dob') {
+                            const today = new Date();
+                            const birthDate = new Date(this.value);
+                            let age = today.getFullYear() - birthDate.getFullYear();
+                            const m = today.getMonth() - birthDate.getMonth();
+                            if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) age--;
+                            document.getElementById('age').value = age;
+                            document.getElementById('cvAge').textContent = age;
+                        }
+                    }
+                    
+                    target.textContent = value || '---';
+                }
+            });
+        });
+
+        // ============= INITIAL APPLICATION DATE =============
+        function setAppDate() {
+            const today = new Date();
+            const dateStr = today.toLocaleDateString('en-GB', { 
+                day: '2-digit', 
+                month: '2-digit', 
+                year: 'numeric' 
+            });
+            document.getElementById('cvAppDate').textContent = dateStr;
+        }
+        setAppDate();
+
+        // ============= INITIAL DATE FORMATTING =============
+        function formatInitialDates() {
+            ['dob', 'passportIssue', 'passportExpiry'].forEach(id => {
+                const input = document.getElementById(id);
+                if (input && input.value) {
+                    const date = new Date(input.value);
+                    const formatted = date.toLocaleDateString('en-GB', {
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric'
+                    });
+                    const target = document.getElementById(input.dataset.target);
+                    if (target) target.textContent = formatted;
+                }
+            });
+        }
+        formatInitialDates();
+
+        // ============= HOUSEHOLD SKILLS CHECKBOXES =============
+        document.querySelectorAll('.household-check').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const skill = this.dataset.skill;
+                const cvCheck = document.getElementById('cvCheck' + skill.charAt(0).toUpperCase() + skill.slice(1));
+                if (cvCheck) {
+                    if (this.checked) {
+                        cvCheck.classList.add('active');
+                        cvCheck.querySelector('.check-box').textContent = '✓';
+                    } else {
+                        cvCheck.classList.remove('active');
+                        cvCheck.querySelector('.check-box').textContent = '';
+                    }
+                }
+                // Visual update on checkbox parent
+                this.parentElement.classList.toggle('checked', this.checked);
+            });
+            // Init
+            checkbox.dispatchEvent(new Event('change'));
+        });
+
+        // ============= LANGUAGE RATINGS =============
+        document.querySelectorAll('.lang-opt').forEach(opt => {
+            opt.addEventListener('click', function() {
+                const lang = this.dataset.lang;
+                const level = this.dataset.level;
+                
+                // Remove selected from all in same lang
+                document.querySelectorAll(`.lang-opt[data-lang="${lang}"]`).forEach(o => {
+                    o.classList.remove('selected');
+                });
+                this.classList.add('selected');
+                
+                // Update CV marks
+                ['excellent', 'good', 'poor'].forEach(l => {
+                    const mark = document.getElementById('cv' + lang.charAt(0).toUpperCase() + lang.slice(1) + l.charAt(0).toUpperCase() + l.slice(1));
+                    if (mark) mark.classList.remove('active');
+                });
+                const activeMark = document.getElementById('cv' + lang.charAt(0).toUpperCase() + lang.slice(1) + level.charAt(0).toUpperCase() + level.slice(1));
+                if (activeMark) activeMark.classList.add('active');
+            });
+        });
+
+        // ============= FILE UPLOADS =============
+        document.getElementById('personalPhoto').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(ev) {
+                    const cvImg = document.getElementById('cvPhotoImg');
+                    const previewImg = document.getElementById('personalPhotoImg');
+                    const placeholder = document.getElementById('cvPhotoPlaceholder');
+                    const preview = document.getElementById('personalPhotoPreview');
+                    
+                    cvImg.src = ev.target.result;
+                    cvImg.style.display = 'block';
+                    previewImg.src = ev.target.result;
+                    placeholder.style.display = 'none';
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        document.getElementById('passportPhoto').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(ev) {
+                    const cvImg = document.getElementById('cvPassportImg');
+                    const previewImg = document.getElementById('passportPhotoImg');
+                    const placeholder = document.getElementById('cvPassportPlaceholder');
+                    const preview = document.getElementById('passportPhotoPreview');
+                    
+                    cvImg.src = ev.target.result;
+                    cvImg.style.display = 'block';
+                    cvImg.style.maxWidth = '100%';
+                    cvImg.style.maxHeight = '200px';
+                    previewImg.src = ev.target.result;
+                    placeholder.style.display = 'none';
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        function removeImage(type) {
+            if (type === 'personal') {
+                document.getElementById('personalPhoto').value = '';
+                document.getElementById('cvPhotoImg').style.display = 'none';
+                document.getElementById('cvPhotoPlaceholder').style.display = 'block';
+                document.getElementById('personalPhotoPreview').style.display = 'none';
+            } else {
+                document.getElementById('passportPhoto').value = '';
+                document.getElementById('cvPassportImg').style.display = 'none';
+                document.getElementById('cvPassportPlaceholder').style.display = 'block';
+                document.getElementById('passportPhotoPreview').style.display = 'none';
+            }
+        }
+
+        // ============= TOGGLE SECTIONS =============
+        function toggleSection(header) {
+            const content = header.nextElementSibling;
+            const icon = header.querySelector('.toggle-icon');
+            content.classList.toggle('collapsed');
+            icon.style.transform = content.classList.contains('collapsed') ? 'rotate(-90deg)' : 'rotate(0deg)';
+        }
+
+        // ============= NOTIFICATION =============
+        function showNotification(message, type = 'success') {
+            const notif = document.getElementById('notification');
+            const text = document.getElementById('notificationText');
+            text.textContent = message;
+            notif.className = 'notification show ' + type;
+            setTimeout(() => {
+                notif.classList.remove('show');
+            }, 3000);
+        }
+
+        // ============= EXPORT TO PDF =============
+        async function exportToPDF() {
+            const btn = document.getElementById('exportBtn');
+            const overlay = document.getElementById('loadingOverlay');
+            const paper = document.getElementById('cvPaper');
+            const wrapper = document.querySelector('.preview-wrapper');
+            const fullName = document.getElementById('fullName').value || 'CV';
+            const safeName = fullName.replace(/[^a-zA-Z0-9\u0600-\u06FF\s]/g, '').replace(/\s+/g, '_');
+            const fileName = `CV_${safeName}_${new Date().toISOString().slice(0,10)}.pdf`;
+
+            btn.disabled = true;
+            overlay.classList.add('show');
+            paper.classList.add('exporting');
+
+            // Save current transform and reset for export
+            const originalTransform = wrapper.style.transform;
+            const originalMargin = paper.style.marginBottom;
+            wrapper.style.transform = 'none';
+            paper.style.marginBottom = '0';
+
+            // Wait a bit for layout to update
+            await new Promise(r => setTimeout(r, 100));
+
+            const opt = {
+                margin: 0,
+                filename: fileName,
+                image: { type: 'jpeg', quality: 1.0 },
+                html2canvas: { 
+                    scale: 2.5, 
+                    useCORS: true,
+                    letterRendering: true,
+                    allowTaint: true,
+                    backgroundColor: '#ffffff',
+                    logging: false,
+                    windowWidth: paper.scrollWidth,
+                    windowHeight: paper.scrollHeight
+                },
+                jsPDF: { 
+                    unit: 'mm', 
+                    format: 'a4', 
+                    orientation: 'portrait',
+                    compress: true,
+                    precision: 16
+                },
+                pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+            };
+
+            try {
+                await html2pdf().set(opt).from(paper).save();
+                showNotification('تم تصدير الملف بنجاح! ✓', 'success');
+            } catch (err) {
+                console.error(err);
+                showNotification('حدث خطأ أثناء التصدير', 'error');
+            } finally {
+                // Restore original styles
+                wrapper.style.transform = originalTransform;
+                paper.style.marginBottom = originalMargin;
+                btn.disabled = false;
+                overlay.classList.remove('show');
+                paper.classList.remove('exporting');
+            }
+        }
+
+        // ============= RESET FORM =============
+        function resetForm() {
+            if (!confirm('هل أنت متأكد من إعادة تعيين جميع البيانات؟ سيتم حذف جميع البيانات المحفوظة.')) return;
+            
+            document.querySelectorAll('input[type="text"], input[type="date"], textarea').forEach(input => {
+                if (input.id !== 'refNo') input.value = '';
+            });
+            
+            document.querySelectorAll('input[data-target]').forEach(input => {
+                const target = document.getElementById(input.dataset.target);
+                if (target) target.textContent = '---';
+            });
+            
+            // Reset language ratings to default
+            document.querySelectorAll('.lang-opt').forEach(opt => opt.classList.remove('selected'));
+            document.querySelectorAll('.lang-rating-mark').forEach(m => m.classList.remove('active'));
+            
+            // Reset household checks
+            document.querySelectorAll('.household-check').forEach(c => {
+                c.checked = false;
+                c.dispatchEvent(new Event('change'));
+            });
+            
+            removeImage('personal');
+            removeImage('passport');
+            
+            try { localStorage.removeItem('alenjaz_cv_data'); } catch(e) {}
+            
+            showNotification('تم إعادة تعيين البيانات', 'success');
+        }
+
+        // ============= INIT CHECKBOX VISUAL STATE =============
+        document.querySelectorAll('.household-check').forEach(c => {
+            c.parentElement.classList.toggle('checked', c.checked);
+        });
+
+        // ============= LOCAL STORAGE - SAVE/LOAD =============
+        const STORAGE_KEY = 'alenjaz_cv_data';
+
+        function saveToStorage() {
+            const data = {
+                inputs: {},
+                checks: {},
+                langs: {},
+                images: {}
+            };
+            
+            document.querySelectorAll('input[data-target], select[data-target], textarea[data-target]').forEach(input => {
+                data.inputs[input.id] = input.value;
+            });
+            
+            document.querySelectorAll('.household-check').forEach(c => {
+                data.checks[c.dataset.skill] = c.checked;
+            });
+            
+            document.querySelectorAll('.lang-opt.selected').forEach(opt => {
+                data.langs[opt.dataset.lang] = opt.dataset.level;
+            });
+            
+            // Save images
+            const personalImg = document.getElementById('cvPhotoImg');
+            if (personalImg.src && personalImg.style.display !== 'none') {
+                data.images.personal = personalImg.src;
+            }
+            
+            const passportImg = document.getElementById('cvPassportImg');
+            if (passportImg.src && passportImg.style.display !== 'none') {
+                data.images.passport = passportImg.src;
+            }
+            
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            } catch(e) {
+                console.warn('Storage limit exceeded - images too large');
+            }
+        }
+
+        function loadFromStorage() {
+            try {
+                const saved = localStorage.getItem(STORAGE_KEY);
+                if (!saved) return;
+                
+                const data = JSON.parse(saved);
+                
+                // Load inputs
+                if (data.inputs) {
+                    Object.keys(data.inputs).forEach(id => {
+                        const input = document.getElementById(id);
+                        if (input && data.inputs[id]) {
+                            input.value = data.inputs[id];
+                            input.dispatchEvent(new Event('input'));
+                        }
+                    });
+                }
+                
+                // Load checks
+                if (data.checks) {
+                    document.querySelectorAll('.household-check').forEach(c => {
+                        if (data.checks.hasOwnProperty(c.dataset.skill)) {
+                            c.checked = data.checks[c.dataset.skill];
+                            c.dispatchEvent(new Event('change'));
+                        }
+                    });
+                }
+                
+                // Load language ratings
+                if (data.langs) {
+                    Object.keys(data.langs).forEach(lang => {
+                        const opt = document.querySelector(`.lang-opt[data-lang="${lang}"][data-level="${data.langs[lang]}"]`);
+                        if (opt) opt.click();
+                    });
+                }
+                
+                // Load images
+                if (data.images) {
+                    if (data.images.personal) {
+                        document.getElementById('cvPhotoImg').src = data.images.personal;
+                        document.getElementById('cvPhotoImg').style.display = 'block';
+                        document.getElementById('cvPhotoPlaceholder').style.display = 'none';
+                        document.getElementById('personalPhotoImg').src = data.images.personal;
+                        document.getElementById('personalPhotoPreview').style.display = 'block';
+                    }
+                    if (data.images.passport) {
+                        document.getElementById('cvPassportImg').src = data.images.passport;
+                        document.getElementById('cvPassportImg').style.display = 'block';
+                        document.getElementById('cvPassportImg').style.maxWidth = '100%';
+                        document.getElementById('cvPassportImg').style.maxHeight = '200px';
+                        document.getElementById('cvPassportPlaceholder').style.display = 'none';
+                        document.getElementById('passportPhotoImg').src = data.images.passport;
+                        document.getElementById('passportPhotoPreview').style.display = 'block';
+                    }
+                }
+            } catch(e) {
+                console.error('Error loading saved data:', e);
+            }
+        }
+
+        // Auto-save on any change
+        let saveTimeout;
+        function debouncedSave() {
+            clearTimeout(saveTimeout);
+            saveTimeout = setTimeout(saveToStorage, 500);
+        }
+
+        document.addEventListener('input', debouncedSave);
+        document.addEventListener('change', debouncedSave);
+
+        // Save when language option clicked
+        document.querySelectorAll('.lang-opt').forEach(opt => {
+            opt.addEventListener('click', debouncedSave);
+        });
+
+        // Load on init
+        window.addEventListener('DOMContentLoaded', () => {
+            // Small delay to ensure everything is ready
+            setTimeout(loadFromStorage, 100);
+        });
+
+    </script>
+</body>
+</html>
